@@ -1,0 +1,20 @@
+#This comparison explores whether a larger number of unnecessary admissions increases 
+#an unsatisfaction of the patients, breaked into the age categories.
+
+library(plyr)
+#install.packages("plyr")
+
+p_happy<-read.csv("C:\\Users\\vh17342\\Desktop\\2018_IEU_Data_Challenge\\GP_PatientExperience\\NHSOF_4a.i_I00739_D.csv")
+gp_overload<-read.csv("C:\\Users\\vh17342\\Desktop\\2018_IEU_Data_Challenge\\Unnecessary_Emergency_Admissions\\CCG_3.1_I00759_D.csv")
+
+hist(p_happy$Indicator.value)
+hist(gp_overload$Indicator.value)
+
+gp_overload_person<-gp_overload[gp_overload$Gender=="Person",-3]
+colnames(gp_overload_person)[1]<-"Year"
+
+dfs<-list(gp_overload_person, p_happy)
+
+joined<-join_all(dfs, type="inner", by="Year")
+joined_age<-joined[joined$Breakdown=="Age",]
+
